@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="student_page.css">
+	<script src="students.js"></script>
+	
+<style>
+	/* Create two equal columns that floats next to each other */
+.column-one {
+  float: left;
+  width: 30%;
+  padding: 10px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #ff6767;
+  height: 450px;
+  overflow: scroll;
+}
+
+.column-two {
+  float: left;
+  width: 60%;
+  height: 450px;
+  padding: 10px;
+  overflow: scroll;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+hr.new5 {
+  border: 2px solid red;
+}
+</style>
+</head>
+<body onload="getExam();reviewCompletedExam();validateLogin();">
+	<div class="header">
+        <p id="login-header">Python Grading System - Student Page</p>
+   </div>
+	<form id="logout">
+          <input type="submit" onclick="logout()" value="LOG OUT">
+    </form>
+    <br>
+   <div class="navigation-bar">
+   	<ul class='navbar'>
+  		<li><a id="defaultOpen" onclick="openPage('take-exams', this)">Take Exams</a></li>
+  		<li><a onclick="openPage('review-exams', this)">Review Exams</a></li>
+	</ul>
+   </div>
+   	<div id="take-exams" class="tabcontent">
+  	 <div class="row">
+  		<div class="column-one">
+    		<center><h3>Pending Exams</h3></center>
+    		<hr>
+    		<div id="exam-list"></div>
+  		</div>
+  		<div class="column-two">
+    		<center><h3 id="exam-nam"></h3></center><br>
+    		<hr>
+    		<div id="current-exam"></div>
+  		</div>
+	 </div>
+	</div>
+
+<div id="review-exams" class="tabcontent">
+  <div class="row">
+  		<div class="column-one">
+    		<center><h3>Review Exams</h3></center>
+    		<hr>
+    		<div id="comp-list"></div>
+  		</div>
+  		<div class="column-two">
+    		<center><h3 id="comp-exam-nam"></h3></center><br>
+          <hr>
+    		  <div id="current-comp-exam"></div>
+  		</div>
+	 </div>
+</div>
+<script>
+
+function logout(){
+  sessionStorage.setItem("username", "null");
+  sessionStorage.setItem("role", "null");
+  console.log("Logout");
+  location.replace('https://web.njit.edu/~pmm44/index.html');
+}
+
+function refresh(){
+  location.reload();
+}
+
+function validateLogin(){
+  var role = sessionStorage.getItem("role");
+  if (role != "student"){
+    location.replace('https://web.njit.edu/~pmm44/index.html');
+  }
+}
+
+function openPage(pageName,elmnt) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(pageName).style.display = "block";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+</body>
+</html>

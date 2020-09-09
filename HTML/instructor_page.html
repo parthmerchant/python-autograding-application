@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="instructor_page.css">
+	<script src="questions.js"></script>
+	<script src="studentss_exams.js"></script>
+</head>
+<body onload="getQuestions();instructorReview();validateLogin();">
+	<div class="header">
+        <p id="login-header">Python Grading System - Instructor Page</p>
+   </div>
+   	<form>
+          <input id="logger" type="submit" onclick="logout()" value="LOG OUT">
+    </form>
+    <br>
+   <div class="navigation-bar">
+   	<ul class='navbar'>
+  		<li><a class="tablink" id="defaultOpen" onclick="openPage('create-exam', this)">Create Exam</a></li>
+  		<li><a class="tablink" onclick="openPage('create-question', this)">Create Question</a></li>
+  		<li><a class="tablink" onclick="openPage('review-exam', this)">Review Exams</a></li>
+	</ul>
+   </div>
+   <div id="create-exam" class="tabcontent">
+  		<div class="row">
+	 	<div class="column">
+         <form id="filter_create_exam">
+       <select id="filter_difficulty_exam_page">
+         <option value="easy">easy</option>
+         <option value="medium">medium</option>
+         <option value="hard">hard</option>
+         <option value="all" selected="selected">All</option>
+       </select>  
+       <select id="filter_topic_exam_page">
+         <option value="list">list</option>
+         <option value="string">string</option>
+         <option value="loops">loops</option>
+         <option value="dictionaries">dictionaries</option>
+         <option value="all" selected="selected">All</option>
+       </select>
+       <input type="text" id="filter_keyword_exam_page" value="" name="filter_keyword">
+       <input type="submit" onclick="getQuestionsForExam()" value="FILTER">
+    </form>
+         
+	 	<div id="exam-content"></div>
+	 </div>
+	 <div class="column">
+	 	Exam Name: <input type="text" class="exam-name-input" id="exam-name-input"><br>
+	 	<input onclick="createExam()" type="submit" value="CREATE EXAM">
+	 	<hr>
+	 	<div id="exam-questions"></div>
+	 </div>
+	</div>
+   </div>
+   <div id="create-question" class="tabcontent">
+  	   <div class="row">
+  <div class="column">
+    <div class="create-question">
+   	<form onsubmit="createQuestion()" id="question-form">
+   		<h3>Create Question</h3>
+  		Write a function named <input type="text" class="input-text" id="fun_name" required> with an argument <input class="input-text" type="text" id="argument_name" required> that
+  		<br><br>
+  		<textarea class="input-text" rows="3" cols="70" id="description" required></textarea>
+  		<br>
+  		and it 
+        <select id="create_question_output_type">
+         <option value="return" selected="selected">Return</option>
+         <option value="print">Print</option>
+       </select>  
+         
+  		output, using 
+     
+     
+      <select id="create_question_constrain">
+      	 <option value="no_constraint" selected="selected">No Constraint</option>
+         <option value="for">For</option>
+         <option value="while">While</option>
+       </select>  	
+    
+    	<hr>
+  		Difficulty: 
+      <select id="difficulty_level_create_question">
+         <option value="easy" selected="selected">easy</option>
+         <option value="medium">medium</option>
+         <option value="hard">hard</option>
+       </select>
+        		
+      Topic: 
+      
+       <select id="create_question_topic">
+         <option value="list" selected="selected">list</option>
+         <option value="string">String</option>
+         <option value="loops">Loops</option>
+         <option value="dictionaries">Dictionaries</option>
+       </select>
+       
+  		<br>Test Cases:<br>
+  		Input 1: <input type="text" class="input-text" id="testcase_input_1" required> Output 1: <input type="text" class="input-text" id="testcase_output_1" required><br>
+  		Input 2: <input type="text" class="input-text" id="testcase_input_2" required> Output 2: <input type="text" class="input-text" id="testcase_output_2" required><br>
+  		Input 3: <input type="text" class="input-text" id="testcase_input_3"> Output 3: <input type="text" class="input-text" id="testcase_output_3"><br>
+  		Input 4: <input type="text" class="input-text" id="testcase_input_4"> Output 4: <input type="text" class="input-text" id="testcase_output_4"><br>
+  		Input 5: <input type="text" class="input-text" id="testcase_input_5"> Output 5: <input type="text" class="input-text" id="testcase_output_5"><br>
+  		Input 6: <input type="text" class="input-text" id="testcase_input_6"> Output 6: <input type="text" class="input-text" id="testcase_output_6"><br>
+  		<br>
+  		<input type="submit" value="CREATE">
+  		<input type="reset" value="RESET">
+  		<br>
+	</form> 
+   </div>
+  </div>
+  <div class="column">
+    <form id="filter_create_question">
+       <select id="filter_difficulty">
+         <option value="easy">easy</option>
+         <option value="medium">medium</option>
+         <option value="hard">hard</option>
+         <option value="all" selected="selected">All</option>
+       </select>  
+       <select id="filter_topic">
+         <option value="list">list</option>
+         <option value="string">string</option>
+         <option value="loops">loops</option>
+         <option value="dictionaries">dictionaries</option>
+         <option value="all" selected="selected">All</option>
+       </select>
+       <input type="text" id="filter_keyword" value="" name="filter_keyword">
+       <input type="submit" onclick="getQuestions()" value="FILTER">
+    </form>
+  	<div id="created">
+    </div>
+  </div>
+</div>
+   </div>
+   <div id="review-exam" class="tabcontent">
+   	<div class="row">
+  <div class="column">
+    <h3>Student Exams</h3>
+    <hr>
+    <div id="completed-exams"></div>
+  </div>
+  <div class="column">
+    <p id="student-exam-name"></p>
+    <p id="student-exam-ucid"></p>
+    <hr>
+    <div id="student-exam-review"></div>
+  </div>
+</div>
+   </div>
+
+
+<script>
+
+var examQs = [];
+var questionPoints = [];
+
+var qL = questionPoints.length;
+
+
+function logout(){
+  sessionStorage.setItem("username", "null");
+  sessionStorage.setItem("role", "null");
+  console.log("Logout");
+  location.replace('https://web.njit.edu/~pmm44/index.html');
+}
+
+function validateLogin(){
+  var role = sessionStorage.getItem("role");
+  if (role != "instructor"){
+    location.replace('https://web.njit.edu/~pmm44/index.html');
+  }
+  console.log(role);
+}
+/*
+function checkNum() {
+	var examQuestions = document.getElementById('exam-questions');
+    var nu = 90000;
+   	while (examQs.length < 5){
+        examQs.push(nu);
+        examQuestions.innerHTML += '<input hidden type="text" value="0" id="point-value-'+nu+'">';
+        nu++;
+    }
+}
+*/
+function createExam(){
+
+	var middle_path = "https://web.njit.edu/~pmm44/beta_middle.php";
+        
+        // Used to send and receive AJAX Requests and Responses
+        var AJAX_Request;
+        
+        // Try AJAX Request for different browsers
+        try{
+            AJAX_Request = new XMLHttpRequest();
+        } catch (e){
+            try{
+                AJAX_Request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try{
+                    AJAX_Request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e){
+                    alert("Login Unsuccessful");
+                    return false;
+                }
+            }
+        }
+        
+        // Function to receive data from server
+        AJAX_Request.onreadystatechange = function(){
+            
+            if(AJAX_Request.readyState == 4){
+                // Retrieve response and store into variable (JSON format)
+            
+            	var responseV = AJAX_Request.responseText;
+                
+             	console.log(responseV); 
+             	location.reload();
+              
+              	
+                
+            }
+        }
+        event.preventDefault();
+        
+        var fLen = examQs.length;
+        
+        console.log(examQs);
+        var examName = document.getElementById('exam-name-input').value;
+        
+        
+        if (document.getElementById('point-value-'+examQs[0]+'') == null) {
+        	var onePoints = 0;
+        }
+        else {
+        	var onePoints = document.getElementById('point-value-'+examQs[0]+'').value;
+        }
+        if (document.getElementById('point-value-'+examQs[1]+'') == null) {
+        	var twoPoints = 0;
+        }
+        else {
+        	var twoPoints = document.getElementById('point-value-'+examQs[1]+'').value;
+        }
+        if (document.getElementById('point-value-'+examQs[2]+'') == null) {
+        	var threePoints = 0;
+        }
+        else {
+        	var threePoints = document.getElementById('point-value-'+examQs[2]+'').value;
+        }
+        if (document.getElementById('point-value-'+examQs[3]+'') == null) {
+        	var fourPoints = 0;
+        }
+        else {
+        	var fourPoints = document.getElementById('point-value-'+examQs[3]+'').value;
+        }
+        if (document.getElementById('point-value-'+examQs[4]+'') == null) {
+        	var fivePoints = 0;
+        }
+        else {
+        	var fivePoints = document.getElementById('point-value-'+examQs[4]+'').value;
+        }
+        
+        while (examQs.length < 5){
+        	examQs.push(-1);
+        }
+        
+        var JSON_message = {"content_type": "create_exam","exam_name": examName,"no_of_ques": fLen,"que_id_1": examQs[0],"que_pts_1": onePoints, "que_id_2": examQs[1],"que_pts_2": twoPoints,"que_id_3": examQs[2],"que_pts_3": threePoints,"que_id_4": examQs[3],"que_pts_4": fourPoints,"que_id_5": examQs[4],"que_pts_5": fivePoints};
+        console.log(JSON_message);
+        // Open AJAX Request Connection to server
+        AJAX_Request.open("POST", middle_path, true);
+        // Reset login form after function getLoginInfo() is triggered
+        document.getElementById("question-form").reset();
+        // Send stringified JSON message to the server
+        AJAX_Request.send(JSON.stringify(JSON_message));
+}
+
+function getQuestionInfo(x){
+
+	var middle_path = "https://web.njit.edu/~pmm44/beta_middle.php";
+        
+        // Used to send and receive AJAX Requests and Responses
+        var AJAX_Request;
+        
+        // Try AJAX Request for different browsers
+        try{
+            AJAX_Request = new XMLHttpRequest();
+        } catch (e){
+            try{
+                AJAX_Request = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try{
+                    AJAX_Request = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e){
+                    alert("Login Unsuccessful");
+                    return false;
+                }
+            }
+        }
+        
+        // Function to receive data from server
+        AJAX_Request.onreadystatechange = function(){
+            
+            if(AJAX_Request.readyState == 4){
+                // Retrieve response and store into variable (JSON format)
+                
+              var responseV = AJAX_Request.responseText;
+                
+              console.log(responseV); 
+              
+              var data = JSON.parse(responseV);
+              
+              
+              
+              var examQuestions = document.getElementById('exam-questions');
+              examQuestions.innerHTML += 'Write a function named '+data['fun_name']+' with an argument '+data['fun_argument_name']+' that '+data['fun_description']+' and it '+data['fun_output_type']+' output, using '+data['fun_constrain']+'.';
+              examQuestions.innerHTML += '<br>';
+              examQuestions.innerHTML += 'Points: <input type="text" id="point-value-'+data['que_id']+'">'
+              examQuestions.innerHTML += '<hr>';
+              
+                
+            }
+        }
+        event.preventDefault();
+        
+        var question_id = x;
+        examQs.push(question_id);
+        console.log(examQs);
+        
+        var JSON_message = {"content_type": "get_question_info","que_id": question_id};
+        console.log(JSON_message);
+        // Open AJAX Request Connection to server
+        AJAX_Request.open("POST", middle_path, true);
+        // Reset login form after function getLoginInfo() is triggered
+        document.getElementById("question-form").reset();
+        // Send stringified JSON message to the server
+        AJAX_Request.send(JSON.stringify(JSON_message));
+}
+function openPage(pageName,elmnt) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(pageName).style.display = "block";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+</body>
+</html>
